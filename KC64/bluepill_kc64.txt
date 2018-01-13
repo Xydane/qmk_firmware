@@ -24,3 +24,7 @@ kc64_pin	bluepill_pin
 46	B12
 
 3	B1
+8	A12
+9	A11
+11	5V
+7	GND

@@ -63,4 +63,8 @@ q	22	45
 lctrl	16	46
 rctrl	18	46
 win	20	46
-low side led switch	3	
+low side led switch	3
+USB D+	8
+USB D-	9
+5V	11
+GND	7
