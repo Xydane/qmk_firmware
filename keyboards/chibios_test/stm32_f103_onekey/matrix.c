@@ -56,9 +56,9 @@ uint8_t matrix_cols(void)
 
 /* generic STM32F103C8T6 board */
 #ifdef BOARD_GENERIC_STM32_F103
-#define LED_ON()    do { palClearPad(GPIOC, GPIOC_LED) ;} while (0)
-#define LED_OFF()   do { palSetPad(GPIOC, GPIOC_LED); } while (0)
-#define LED_TGL()   do { palTogglePad(GPIOC, GPIOC_LED); } while (0)
+#define LED_ON()    do { palClearPad(GPIOB, 1) ;} while (0)
+#define LED_OFF()   do { palSetPad(GPIOB, 1); } while (0)
+#define LED_TGL()   do { palTogglePad(GPIOB, 1); } while (0)
 #endif
 
 /* Maple Mini */
@@ -142,36 +142,108 @@ void matrix_print(void)
  */
 static void  init_cols(void)
 {
-#ifdef BOARD_MAPLEMINI_STM32_F103
-    // don't need pullup/down, since it's pulled down in hardware
-    palSetPadMode(GPIOB, 8, PAL_MODE_INPUT);
-#else
-    palSetPadMode(GPIOB, 8, PAL_MODE_INPUT_PULLDOWN);
-#endif
+  palSetPadMode(GPIOA, 6, PAL_MODE_INPUT_PULLUP);
+  palSetPadMode(GPIOA, 2, PAL_MODE_INPUT_PULLUP);
+  palSetPadMode(GPIOA, 4, PAL_MODE_INPUT_PULLUP);
+  palSetPadMode(GPIOA, 5, PAL_MODE_INPUT_PULLUP);
+  palSetPadMode(GPIOA, 1, PAL_MODE_INPUT_PULLUP);
+  palSetPadMode(GPIOA, 3, PAL_MODE_INPUT_PULLUP);
+  palSetPadMode(GPIOA, 7, PAL_MODE_INPUT_PULLUP);
+  palSetPadMode(GPIOA, 0, PAL_MODE_INPUT_PULLUP);
 }
 
 /* Returns status of switches(1:on, 0:off) */
 static matrix_row_t read_cols(void)
 {
-    return ((palReadPad(GPIOB, 8)==PAL_LOW) ? 0 : (1<<0));
-    // | ((palReadPad(...)==PAL_HIGH) ? 0 : (1<<1))
+  return ((palReadPad(GPIOA, 6)==PAL_HIGH) ? 0 : (1<<0))
+    | ((palReadPad(GPIOA, 2)==PAL_HIGH) ? 0 : (1<<1))
+    | ((palReadPad(GPIOA, 4)==PAL_HIGH) ? 0 : (1<<2))
+    | ((palReadPad(GPIOA, 5)==PAL_HIGH) ? 0 : (1<<3))
+    | ((palReadPad(GPIOA, 1)==PAL_HIGH) ? 0 : (1<<4))
+    | ((palReadPad(GPIOA, 3)==PAL_HIGH) ? 0 : (1<<5))
+    | ((palReadPad(GPIOA, 7)==PAL_HIGH) ? 0 : (1<<6))
+    | ((palReadPad(GPIOA, 0)==PAL_HIGH) ? 0 : (1<<7));
 }
 
 /* Row pin configuration
  */
 static void unselect_rows(void)
 {
-    // palSetPadMode(GPIOA, GPIOA_PIN10, PAL_MODE_INPUT); // hi-Z
+  palSetPadMode(GPIOB, 9, PAL_MODE_INPUT);
+  palSetPadMode(GPIOB, 8, PAL_MODE_INPUT);
+  palSetPadMode(GPIOB, 7, PAL_MODE_INPUT);
+  palSetPadMode(GPIOB, 6, PAL_MODE_INPUT);
+  palSetPadMode(GPIOB, 5, PAL_MODE_INPUT);
+  palSetPadMode(GPIOA, 10, PAL_MODE_INPUT);
+  palSetPadMode(GPIOB, 10, PAL_MODE_INPUT);
+  palSetPadMode(GPIOB, 11, PAL_MODE_INPUT);
+  palSetPadMode(GPIOA, 9, PAL_MODE_INPUT);
+  palSetPadMode(GPIOA, 8, PAL_MODE_INPUT);
+  palSetPadMode(GPIOB, 15, PAL_MODE_INPUT);
+  palSetPadMode(GPIOB, 14, PAL_MODE_INPUT);
+  palSetPadMode(GPIOB, 13, PAL_MODE_INPUT);
+  palSetPadMode(GPIOB, 12, PAL_MODE_INPUT);
 }
 
 static void select_row(uint8_t row)
 {
     (void)row;
-    // Output low to select
-    // switch (row) {
-    //     case 0:
-    //         palSetPadMode(GPIOA, GPIOA_PIN10, PAL_MODE_OUTPUT_PUSHPULL);
-    //         palSetPad(GPIOA, GPIOA_PIN10, PAL_LOW);
-    //         break;
-    // }
+    switch (row) {
+    case 0:
+      palSetPadMode(GPIOB, 9, PAL_MODE_OUTPUT_PUSHPULL);
+      palClearPad(GPIOB, 9);
+      break;
+    case 1:
+      palSetPadMode(GPIOB, 8, PAL_MODE_OUTPUT_PUSHPULL);
+      palClearPad(GPIOB, 8);
+      break;
+    case 2:
+      palSetPadMode(GPIOB, 7, PAL_MODE_OUTPUT_PUSHPULL);
+      palClearPad(GPIOB, 7);
+      break;
+    case 3:
+      palSetPadMode(GPIOB, 6, PAL_MODE_OUTPUT_PUSHPULL);
+      palClearPad(GPIOB, 6);
+      break;
+    case 4:
+      palSetPadMode(GPIOB, 5, PAL_MODE_OUTPUT_PUSHPULL);
+      palClearPad(GPIOB, 5);
+      break;
+    case 5:
+      palSetPadMode(GPIOA, 10, PAL_MODE_OUTPUT_PUSHPULL);
+      palClearPad(GPIOA, 10);
+      break;
+    case 6:
+      palSetPadMode(GPIOB, 10, PAL_MODE_OUTPUT_PUSHPULL);
+      palClearPad(GPIOB, 10);
+      break;
+    case 7:
+      palSetPadMode(GPIOB, 11, PAL_MODE_OUTPUT_PUSHPULL);
+      palClearPad(GPIOB, 11);
+      break;
+    case 8:
+      palSetPadMode(GPIOA, 9, PAL_MODE_OUTPUT_PUSHPULL);
+      palClearPad(GPIOA, 9);
+      break;
+    case 9:
+      palSetPadMode(GPIOA, 8, PAL_MODE_OUTPUT_PUSHPULL);
+      palClearPad(GPIOA, 8);
+      break;
+    case 10:
+      palSetPadMode(GPIOB, 15, PAL_MODE_OUTPUT_PUSHPULL);
+      palClearPad(GPIOB, 15);
+      break;
+    case 11:
+      palSetPadMode(GPIOB, 14, PAL_MODE_OUTPUT_PUSHPULL);
+      palClearPad(GPIOB, 14);
+      break;
+    case 12:
+      palSetPadMode(GPIOB, 13, PAL_MODE_OUTPUT_PUSHPULL);
+      palClearPad(GPIOB, 13);
+      break;
+    case 13:
+      palSetPadMode(GPIOB, 12, PAL_MODE_OUTPUT_PUSHPULL);
+      palClearPad(GPIOB, 12);
+      break;
+    }
 }
